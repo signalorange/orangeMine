@@ -75,6 +75,24 @@ services:
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
+  tailscale:
+    image: tailscale/tailscale
+    container_name: tailscale
+    environment:
+      - TAILSCALE_AUTHKEY=${TAILSCALE_AUTHKEY} # Use your Tailscale auth key
+      - TAILSCALE_HOSTNAME=${HOSTNAME}
+      - TAILSCALE_UP=true
+    cap_add:
+      - NET_ADMIN                 # Required for modifying network settings
+      - SYS_MODULE
+    ports:
+      - "41641:41641"             # Tailscale's default port for control
+    networks:
+      vpn-net:                   # Use the VPN bridge network
+      kea-11-ipvlan:
+      kea-10-ipvlan:
+    restart: always
+
 networks:
   kea-10-ipvlan:  # Network that binds container to host network interface.
     name: kea-10-ipvlan
@@ -99,3 +117,6 @@ networks:
     ipam:
       config:
         - subnet: ${SUBNET2}  # Subnet for Kea containers
+
+  vpn-net:                      # Define the VPN bridge network
+    driver: bridge
