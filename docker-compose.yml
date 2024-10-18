@@ -23,7 +23,9 @@ services:
       - PUID=1000             # Set your user ID
       - PGID=1000             # Set your group ID
       - SERVERPORT=51820      # Default WireGuard port
+      - PEERS=5  # Number of WireGuard peers
       - DEBUG=1               # Enable debug logging
+      - PEERDNS=1.1.1.1  # DNS resolver for clients
     volumes:
       - ./wireguard:/config/wg_confs
     cap_add:
@@ -34,7 +36,7 @@ services:
     ports:
       - "51820:51820/udp"      # WireGuard default port
     networks:
-      kea-10-ipvlan: # network that binds container to host network interface.
+      vpn-net: # network that binds container to host network interface.
         ipv4_address: ${WG_IP4} # ip for kea4 server
     restart: always
 
@@ -76,7 +78,7 @@ networks:
     name: kea-10-ipvlan
     driver: ipvlan
     driver_opts:
-      parent: ${ETH} #  host interface that kea containers will use !!!!!!
+      parent: ${ETH1} #  host interface that kea containers will use !!!!!!
     enable_ipv6: false
     ipam:
       config:
@@ -84,3 +86,10 @@ networks:
           gateway: ${GATEWAY4} # the other eth interface
   kea-20-backend: # internal network for communication with database
     name: kea-20-backend
+  vpn-net:
+    driver: bridge
+    driver_opts:
+      parent: ${ETH2} #  host interface that vpn containers will use
+    ipam:
+      config:
+        - subnet: ${SUBNET2}
