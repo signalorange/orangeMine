@@ -6,7 +6,6 @@ services:
       - UPSTREAM1=https://1.1.1.1/dns-query
       - UPSTREAM2=https://9.9.9.9:5053/dns-query
       - PORT=53
-    network_mode: "host"
     ports:
       - "53:53/udp"
     networks:
@@ -29,7 +28,6 @@ services:
         source: ./kea # configuration files
         target: /etc/kea
       - ./kea/var:/var/lib/kea
-
     restart: always
 
   wireguard:
