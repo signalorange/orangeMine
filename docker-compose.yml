@@ -1,13 +1,14 @@
 services:
-  bind9:
-    image: ubuntu/bind9:${BIND_VERSION}
-    container_name: bind9
-    volumes:
-      - ./bind:/etc/bind       # Bind configuration
-      - ./bind/cache:/var/cache/bind  # Bind cache
+  cloudflared:
+    container_name: cloudflared
+    image: visibilityspots/cloudflared
+    environment:
+      - UPSTREAM1=https://1.1.1.1/dns-query
+      - UPSTREAM1=https://9.9.9.9:5053/dns-query
+      - PORT=53
+    #network_mode: "host"
     ports:
-      - "53:53/udp"            # DNS port
-      - "853:853/tcp"          # DNS-over-TLS
+      - "53:53/udp"
     networks:
       kea-10-ipvlan: # network that binds container to host network interface.
         ipv4_address: ${BIND_IP4} # ip for kea4 server
