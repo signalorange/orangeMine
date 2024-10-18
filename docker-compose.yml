@@ -9,9 +9,9 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
     volumes:
-      - ./database:/var/lib/posgresql
+      - ./database:/var/lib/postgresql
       - type: bind
-        source: ./initdb # database setup script from kea for first run
+        source: ./initdb  # Database setup script from kea for the first run
         target: /docker-entrypoint-initdb.d
     networks:
       kea-20-backend:
@@ -23,74 +23,71 @@ services:
       - PUID=1000             # Set your user ID
       - PGID=1000             # Set your group ID
       - SERVERPORT=51820      # Default WireGuard port
-      - PEERS=5  # Number of WireGuard peers
+      - PEERS=5               # Number of WireGuard peers
       - DEBUG=1               # Enable debug logging
-      - PEERDNS=1.1.1.1  # DNS resolver for clients
+      - PEERDNS=1.1.1.1       # DNS resolver for clients
     volumes:
       - ./wireguard:/config/wg_confs
     cap_add:
-      - NET_ADMIN              # Required for modifying network settings
+      - NET_ADMIN             # Required for modifying network settings
       - SYS_MODULE
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     ports:
-      - "51820:51820/udp"      # WireGuard default port
+      - "51820:51820/udp"     # WireGuard default port
     networks:
-      vpn-net: # network that binds container to host network interface.
-        ipv4_address: ${WG_IP4} # ip for kea4 server
+      vpn-net:  # Network for WireGuard routing through eth2
+    #    ipv4_address: ${WG_IP4}  # IP for WireGuard container
     restart: always
 
   cloudflared:
     container_name: cloudflared
     image: visibilityspots/cloudflared
-    depends_on: # delay start until wireguard is ready
-      - wireguard
+    depends_on:
+      - wireguard             # Delay start until WireGuard is ready
     environment:
       - UPSTREAM1=https://1.1.1.1/dns-query
       - UPSTREAM2=https://9.9.9.9:5053/dns-query
       - PORT=53
     ports:
-      - "53:53/udp"
+      - "53:53/udp"           # DNS port for Cloudflare DoT
     networks:
-      kea-10-ipvlan: # network that binds container to host network interface.
-        ipv4_address: ${BIND_IP4} # ip for kea4 server
+      kea-10-ipvlan:          # Network for Kea interface and cloudflared DNS
+        ipv4_address: ${BIND_IP4}  # IP for cloudflared DNS
       vpn-net:
     restart: always
 
   kea:
     image: docker.cloudsmith.io/isc/docker/kea-dhcp4:${KEA_VERSION}
     container_name: kea
-    depends_on: # delay start until database is ready
+    depends_on:
       db:
-        condition: service_healthy
+        condition: service_healthy  # Delay start until the database is healthy
     networks:
-      kea-10-ipvlan: # network that binds container to host network interface.
-        ipv4_address: ${KEA_IP4} # ip for kea4 server
-      kea-20-backend: # internal network for communication with database
+      kea-10-ipvlan:  # Network that binds container to host network interface on eth1
+        ipv4_address: ${KEA_IP4}  # IP for Kea container
+      kea-20-backend:  # Internal network for communication with database
     volumes:
       - type: bind
-        source: ./kea # configuration files
+        source: ./kea  # Configuration files for Kea
         target: /etc/kea
-      - ./kea/var:/var/lib/kea
+      - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
 networks:
-  kea-10-ipvlan: # network that binds container to host network interface.
+  kea-10-ipvlan:  # Network that binds container to host network interface.
     name: kea-10-ipvlan
     driver: ipvlan
     driver_opts:
-      parent: ${ETH1} #  host interface that kea containers will use !!!!!!
+      parent: ${ETH1}  # Host interface that Kea containers will use (eth1)
     enable_ipv6: false
     ipam:
       config:
-        - subnet: ${SUBNET4} # subnet for kea4 server
-          gateway: ${GATEWAY4} # the other eth interface
-  kea-20-backend: # internal network for communication with database
+        - subnet: ${SUBNET4}  # Subnet for Kea containers
+          gateway: ${GATEWAY4}  # Gateway for Kea subnet
+
+  kea-20-backend:  # Internal network for communication with database
     name: kea-20-backend
+
   vpn-net:
-    driver: bridge
-    driver_opts:
-      parent: ${ETH2} #  host interface that vpn containers will use
-    ipam:
-      config:
-        - subnet: ${SUBNET2}
+    internal: true  # Makes the network internal, isolated from the host
