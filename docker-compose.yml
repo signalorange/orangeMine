@@ -1,7 +1,46 @@
 services:
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    container_name: db
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U kea -d kea -c 'SELECT version FROM schema_version'"]
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    volumes:
+      - ./database:/var/lib/posgresql
+      - type: bind
+        source: ./initdb # database setup script from kea for first run
+        target: /docker-entrypoint-initdb.d
+    networks:
+      kea-20-backend:
+
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    environment:
+      - PUID=1000             # Set your user ID
+      - PGID=1000             # Set your group ID
+      - SERVERPORT=51820      # Default WireGuard port
+      - DEBUG=1               # Enable debug logging
+    volumes:
+      - ./wireguard:/config/wg_confs
+    cap_add:
+      - NET_ADMIN              # Required for modifying network settings
+    ports:
+      - "51820:51820/udp"      # WireGuard default port
+    networks:
+      kea-10-ipvlan: # network that binds container to host network interface.
+        ipv4_address: ${WG_IP4} # ip for kea4 server
+    restart: always
+
   cloudflared:
     container_name: cloudflared
     image: visibilityspots/cloudflared
+    depends_on: # delay start until wireguard is ready
+      wireguard:
+        condition: service_healthy
     environment:
       - UPSTREAM1=https://1.1.1.1/dns-query
       - UPSTREAM2=https://9.9.9.9:5053/dns-query
@@ -29,42 +68,6 @@ services:
         target: /etc/kea
       - ./kea/var:/var/lib/kea
     restart: always
-
-  wireguard:
-    image: linuxserver/wireguard
-    container_name: wireguard
-    environment:
-      - PUID=1000             # Set your user ID
-      - PGID=1000             # Set your group ID
-      - SERVERPORT=51820      # Default WireGuard port
-      - DEBUG=1               # Enable debug logging
-    volumes:
-      - ./wireguard:/mnt/wireguard
-    cap_add:
-      - NET_ADMIN              # Required for modifying network settings
-    ports:
-      - "51820:51820/udp"      # WireGuard default port
-    networks:
-      kea-10-ipvlan: # network that binds container to host network interface.
-        ipv4_address: ${WG_IP4} # ip for kea4 server
-    restart: always
-  
-  db:
-    image: postgres:${POSTGRES_VERSION}
-    container_name: db
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "psql -U kea -d kea -c 'SELECT version FROM schema_version'"]
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-    volumes:
-      - ./database:/var/lib/posgresql
-      - type: bind
-        source: ./initdb # database setup script from kea for first run
-        target: /docker-entrypoint-initdb.d
-    networks:
-      kea-20-backend:
 
 networks:
   kea-10-ipvlan: # network that binds container to host network interface.
