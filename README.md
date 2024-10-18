@@ -21,6 +21,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 
 ## Prerequisites
 
+- Two ETH interfaces
 - Ubuntu 24.04 LTS
 - Docker
 - Docker Compose
