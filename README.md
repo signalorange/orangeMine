@@ -30,7 +30,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 1. Clone the repository:
 
 2. Copy the exmaple files:
-  - `cp .env.example .env`
+  - `cp example.env .env`
   - `cp bind/named.conf-example.options bind/named.conf.options`
   - `cp kea/kea-dhcp4-example.conf kea/kea-dhcp4.conf`
   - `cp wireguard/wg0-example.conf wireguard/wg0.conf` or copy your WG config file
@@ -38,5 +38,5 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 3. Edit the .env file to configure the services
 4. Edit the `kea/kea-dhcp4.conf` file to configure the DHCP server
 5. Edit the `bind/named.conf.options` file to configure the DNS server
-
-6. Run `docker-compose up -d` to start the services
+6. run setup.sh
+7. Run `docker-compose up -d` to start the services
