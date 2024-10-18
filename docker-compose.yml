@@ -28,6 +28,9 @@ services:
       - ./wireguard:/config/wg_confs
     cap_add:
       - NET_ADMIN              # Required for modifying network settings
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
     ports:
       - "51820:51820/udp"      # WireGuard default port
     networks:
