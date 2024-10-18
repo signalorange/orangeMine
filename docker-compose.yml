@@ -54,6 +54,7 @@ services:
     networks:
       kea-10-ipvlan: # network that binds container to host network interface.
         ipv4_address: ${BIND_IP4} # ip for kea4 server
+      vpn-net:
     restart: always
 
   kea:
