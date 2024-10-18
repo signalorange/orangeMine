@@ -98,4 +98,4 @@ networks:
     enable_ipv6: false
     ipam:
       config:
-        - subnet: ${SUBNET1}  # Subnet for Kea containers
+        - subnet: ${SUBNET2}  # Subnet for Kea containers
