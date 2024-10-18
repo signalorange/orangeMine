@@ -35,10 +35,11 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
     ports:
       - "51820:51820/udp"     # WireGuard default port
-    networks:
-      kea-11-ipvlan:  # Network for WireGuard routing through eth2
-      kea-10-ipvlan:
-        ipv4_address: ${WG_IP4}  # IP for WireGuard container
+    network_mode: host
+    #networks:
+      #kea-11-ipvlan:  # Network for WireGuard routing through eth2
+    #  kea-10-ipvlan:
+    #    ipv4_address: ${WG_IP4}  # IP for WireGuard container
     restart: always
 
   cloudflared:
@@ -55,7 +56,7 @@ services:
     networks:
       kea-10-ipvlan:          # Network for Kea interface and cloudflared DNS
         ipv4_address: ${BIND_IP4}  # IP for cloudflared DNS
-      kea-11-ipvlan:
+      #kea-11-ipvlan:
     restart: always
 
   kea:
@@ -89,7 +90,7 @@ services:
       - "41641:41641"             # Tailscale's default port for control
     networks:
       vpn-net:                   # Use the VPN bridge network
-      kea-11-ipvlan:
+      #kea-11-ipvlan:
       kea-10-ipvlan:
     restart: always
 
@@ -108,15 +109,15 @@ networks:
   kea-20-backend:  # Internal network for communication with database
     name: kea-20-backend
 
-  kea-11-ipvlan:  # Network that binds container to host network interface.
-    name: kea-11-ipvlan
-    driver: ipvlan
-    driver_opts:
-      parent: ${ETH2}  # Host interface that Kea containers will use (eth1)
-    enable_ipv6: false
-    ipam:
-      config:
-        - subnet: ${SUBNET2}  # Subnet for Kea containers
+  # kea-11-ipvlan:  # Network that binds container to host network interface.
+  #   name: kea-11-ipvlan
+  #   driver: ipvlan
+  #   driver_opts:
+  #     parent: ${ETH2}  # Host interface that Kea containers will use (eth1)
+  #   enable_ipv6: false
+  #   ipam:
+  #     config:
+  #       - subnet: ${SUBNET2}  # Subnet for Kea containers
 
   vpn-net:                      # Define the VPN bridge network
     driver: bridge
