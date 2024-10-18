@@ -16,32 +16,33 @@ services:
     networks:
       kea-20-backend:
 
-  wireguard:
-    image: linuxserver/wireguard
-    container_name: wireguard
-    environment:
-      - PUID=1000             # Set your user ID
-      - PGID=1000             # Set your group ID
-      - SERVERPORT=51820      # Default WireGuard port
-      - PEERS=5               # Number of WireGuard peers
-      - DEBUG=1               # Enable debug logging
-      - PEERDNS=1.1.1.1       # DNS resolver for clients
-    volumes:
-      - ./wireguard:/config/wg_confs
-    cap_add:
-      - NET_ADMIN             # Required for modifying network settings
-      - SYS_MODULE
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    ports:
-      - "51820:51820/udp"     # WireGuard default port
-    #network_mode: host
-    networks:
-      vpn-net:
-      #kea-11-ipvlan:  # Network for WireGuard routing through eth2
-    #  kea-10-ipvlan:
-    #    ipv4_address: ${WG_IP4}  # IP for WireGuard container
-    restart: always
+  # wireguard:
+  #   image: linuxserver/wireguard
+  #   container_name: wireguard
+  #   environment:
+  #     - PUID=1000             # Set your user ID
+  #     - PGID=1000             # Set your group ID
+  #     - SERVERPORT=51820      # Default WireGuard port
+  #     - PEERS=5               # Number of WireGuard peers
+  #     - DEBUG=1               # Enable debug logging
+  #     - PEERDNS=1.1.1.1       # DNS resolver for clients
+  #   volumes:
+  #     - ./wireguard:/config/wg_confs
+  #   cap_add:
+  #     - NET_ADMIN             # Required for modifying network settings
+  #     - SYS_MODULE
+  #   sysctls:
+  #     - net.ipv4.ip_forward=1
+  #     - net.ipv4.conf.all.src_valid_mark=1
+  #   ports:
+  #     - "51820:51820/udp"     # WireGuard default port
+  #   #network_mode: host
+  #   networks:
+  #     vpn-net:
+  #     #kea-11-ipvlan:  # Network for WireGuard routing through eth2
+  #   #  kea-10-ipvlan:
+  #   #    ipv4_address: ${WG_IP4}  # IP for WireGuard container
+  #   restart: always
 
   cloudflared:
     container_name: cloudflared
