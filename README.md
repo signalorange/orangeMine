@@ -6,11 +6,37 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 # Features
 - Docker Compose based for easy deployment
 - DHCP & DNS Server (Kea, DoH)
-- pyasic
+- Wireguard VPN for LAN traffic
+- Tailscale container for remote access
+- pyasic FastAPI Bridge
 - PETAL control center (config, dashboards)
 - OCEAN pool
 - DATUM Gateway
-- BTC Node with automatic prune
+- BTC Node (Knots) with automatic prune
 - Lightning Node (OCEAN Payout)
 - VPN & Tor tunnel for all the mine traffic
 - Fail2Ban & Firewall
+
+# Setup
+
+## Prerequisites
+
+- Ubuntu 24.04 LTS
+- Docker
+- Docker Compose
+
+## Configuration
+
+1. Clone the repository:
+
+2. Copy the exmaple files:
+  - `cp .env.example .env`
+  - `cp bind/named.conf-example.options bind/named.conf.options`
+  - `cp kea/kea-dhcp4-example.conf kea/kea-dhcp4.conf``
+  - `cp wireguard/wg0-example.conf wireguard/wg0.conf` or copy your WG config file
+
+3. Edit the .env file to configure the services
+4. Edit the `kea/kea-dhcp4.conf` file to configure the DHCP server
+5. Edit the `bind/named.conf.options` file to configure the DNS server
+
+6. Run `docker-compose up -d` to start the services

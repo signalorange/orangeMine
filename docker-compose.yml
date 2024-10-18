@@ -1,0 +1,81 @@
+services:
+  bind9:
+    image: ubuntu/bind9:${BIND_VERSION}
+    container_name: bind9
+    volumes:
+      - ./bind:/etc/bind       # Bind configuration
+      - ./bind/cache:/var/cache/bind  # Bind cache
+    ports:
+      - "53:53/udp"            # DNS port
+      - "853:853/tcp"          # DNS-over-TLS
+    networks:
+      kea-10-ipvlan: # network that binds container to host network interface.
+        ipv4_address: ${BIND_IP4} # ip for kea4 server
+    restart: always
+
+  kea:
+    image: docker.cloudsmith.io/isc/docker/kea-dhcp4:${KEA_VERSION}
+    container_name: kea
+    depends_on: # delay start until database is ready
+      db:
+        condition: service_healthy
+    networks:
+      kea-10-ipvlan: # network that binds container to host network interface.
+        ipv4_address: ${KEA_IP4} # ip for kea4 server
+      kea-20-backend: # internal network for communication with database
+    volumes:
+      - type: bind
+        source: ./kea # configuration files
+        target: /etc/kea
+      - ./kea/var:/var/lib/kea
+
+    restart: always
+
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    environment:
+      - PUID=1000             # Set your user ID
+      - PGID=1000             # Set your group ID
+      - SERVERPORT=51820      # Default WireGuard port
+      - DEBUG=1               # Enable debug logging
+    volumes:
+      - ./wireguard:/mnt/wireguard
+    cap_add:
+      - NET_ADMIN              # Required for modifying network settings
+    ports:
+      - "51820:51820/udp"      # WireGuard default port
+    networks:
+      kea-10-ipvlan: # network that binds container to host network interface.
+        ipv4_address: ${WG_IP4} # ip for kea4 server
+    restart: always
+  
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    container_name: db
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U keadb -d keadb -c 'SELECT version FROM schema_version'"]
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    volumes:
+      - ./database:/var/lib/posgresql
+      - type: bind
+        source: ./initdb # database setup script from kea for first run
+        target: /docker-entrypoint-initdb.d
+    networks:
+      kea-20-backend:
+
+networks:
+  kea-10-ipvlan: # network that binds container to host network interface.
+    name: kea-10-ipvlan
+    driver: ipvlan
+    driver_opts:
+      parent: ${ETH} #  host interface that kea containers will use !!!!!!
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: ${SUBNET4} # subnet for kea4 server
+  kea-20-backend: # internal network for communication with database
+    name: kea-20-backend
