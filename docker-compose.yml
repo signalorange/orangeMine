@@ -81,5 +81,6 @@ networks:
     ipam:
       config:
         - subnet: ${SUBNET4} # subnet for kea4 server
+        - gateway: ${GATEWAY4} # the other eth interface
   kea-20-backend: # internal network for communication with database
     name: kea-20-backend
