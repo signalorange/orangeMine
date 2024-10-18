@@ -3,3 +3,4 @@ wireguard/wg0.conf
 .env
 bind/named.conf.options
 initdb/dhcpdb_create.sql
+bind/named.conf

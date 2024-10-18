@@ -31,7 +31,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 
 2. Copy the exmaple files:
   - `cp example.env .env`
-  - `cp bind/named.conf-example.options bind/named.conf.options`
+  - `cp bind/named-example.conf bind/named.conf`
   - `cp kea/kea-dhcp4-example.conf kea/kea-dhcp4.conf`
   - `cp wireguard/wg0-example.conf wireguard/wg0.conf` or copy your WG config file
 
