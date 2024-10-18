@@ -2,4 +2,4 @@ kea/kea-dhcp4.conf
 wireguard/wg0.conf
 .env
 bind/named.conf.options
-initdb/*
+initdb/dhcpdb_create.sql
