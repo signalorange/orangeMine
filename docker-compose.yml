@@ -22,7 +22,7 @@ services:
       - PUID=1000             # Set your user ID
       - PGID=1000             # Set your group ID
       - SERVERPORT=51820      # Default WireGuard port
-      - PEERS=5               # Number of WireGuard peers
+    #  - PEERS=5               # Number of WireGuard peers
       - DEBUG=1               # Enable debug logging
       - PEERDNS=1.1.1.1       # DNS resolver for clients
     volumes:
