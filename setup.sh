@@ -6,10 +6,10 @@ sudo sysctl -w net.ipv4.ip_forward=1
 echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 
 # Add a routing table
-echo "200 wg_route" | sudo tee -a /etc/iproute2/rt_tables
-sudo ip route add default dev wg0 table wg_route
-sudo ip rule add from 10.13.13.0/24 table wg_route
-sudo ip route add default via ${ETH2_IP} dev ${ETH2} metric 100
+#echo "200 wg_route" | sudo tee -a /etc/iproute2/rt_tables
+#sudo ip route add default dev wg0 table wg_route
+#sudo ip rule add from 10.13.13.0/24 table wg_route
+#sudo ip route add default via ${ETH2_IP} dev ${ETH2} metric 100
 
 # Edit iptables
 sudo iptables -I FORWARD -s ${SUBNET4} -j ACCEPT
