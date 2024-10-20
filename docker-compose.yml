@@ -47,7 +47,7 @@ services:
     #depends_on:
     #  - wireguard             # Delay start until WireGuard is ready
     environment:
-      - UPSTREAM1=https://1.1.1.1:5053/dns-query
+      - UPSTREAM1=https://1.1.1.1/dns-query
       - UPSTREAM2=https://9.9.9.9:5053/dns-query
       - PORT=53
     ports:

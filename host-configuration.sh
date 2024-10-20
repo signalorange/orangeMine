@@ -47,6 +47,10 @@ sudo ethtool -K $NETDEV rx-udp-gro-forwarding on rx-gro-list off
 printf '#!/bin/sh\n\nethtool -K %s rx-udp-gro-forwarding on rx-gro-list off \n' "$(ip route show 0/0 | cut -f5 -d" ")" | sudo tee /etc/networkd-dispatcher/routable.d/50-tailscale
 sudo chmod 755 /etc/networkd-dispatcher/routable.d/50-tailscale
 
+# disable systemd-resolved (orignial DNS)
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+
 # start services
 docker compose up -d
 
