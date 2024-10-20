@@ -32,7 +32,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 
 2. Copy the exmaple files:
   - `cp example.env .env`
-  - `cp kea/kea-dhcp4-example.conf kea/kea-dhcp4.conf`
+  - `cp kea/kea-dhcp4.conf kea/kea-dhcp4.conf-example`
   - `cp wireguard/wg0.conf-example wireguard/wg0.conf` or copy your WG config file
 
 3. Edit the .env file to configure the services
