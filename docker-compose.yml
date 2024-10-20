@@ -56,6 +56,8 @@ services:
     ports:
       - "53:53/udp"           # DNS port for Cloudflare DoT
     networks:
+      access-wg:
+        ipv4_address: 172.19.0.2
       kea-10-ipvlan:          # Network for Kea interface and cloudflared DNS
         ipv4_address: ${DNS_IP4}  # IP for cloudflared DNS
       #kea-11-ipvlan:
@@ -91,7 +93,7 @@ services:
     ports:
       - "41641:41641"             # Tailscale's default port for control
     networks:
-      vpn-net:                   # Use the VPN bridge network
+      access-wg:                   # Use the VPN bridge network
       #kea-11-ipvlan:
       kea-10-ipvlan:
     restart: always
@@ -121,5 +123,8 @@ networks:
   #     config:
   #       - subnet: ${SUBNET2}  # Subnet for Kea containers
 
-  vpn-net:                      # Define the VPN bridge network
+  access-wg:                      # Define the VPN bridge network
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16  # Example subnet for the bridge network
