@@ -11,6 +11,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 sudo apt update
 sudo apt install docker-ce
 sudo apt upgrade
+sudo aa-remove-unknown
 
 sudo groupadd docker
 sudo usermod -aG docker $USER
@@ -20,6 +21,10 @@ newgrp docker
 sudo nano /etc/default/grub
 # GRUB_RECORDFAIL_TIMEOUT=5
 sudo update-grub
+
+## configure host interface LAN
+sudo ip addr add ${GATEWAY4}/24 dev ${ETH1}
+sudo ip link set dev ${ETH1} up
 
 ## enable routing
 echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
