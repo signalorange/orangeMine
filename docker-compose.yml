@@ -57,7 +57,6 @@ services:
       - "53:53/udp"           # DNS port for Cloudflare DoT
     networks:
       access-wg:
-        ipv4_address: 172.19.0.2
       kea-10-ipvlan:          # Network for Kea interface and cloudflared DNS
         ipv4_address: ${DNS_IP4}  # IP for cloudflared DNS
       #kea-11-ipvlan:
@@ -125,6 +124,3 @@ networks:
 
   access-wg:                      # Define the VPN bridge network
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.19.0.0/16  # Example subnet for the bridge network
