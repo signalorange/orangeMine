@@ -30,6 +30,7 @@ sudo ip link set dev ${ETH1} up
 echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -w net.ipv4.ip_forward=1
 sudo sysctl -p /etc/sysctl.conf
+sudo sysctl -w net.ipv4.conf.all.src_valid_mark=1 #for wireguard
 
 ## install orangeMine
 git clone https://github.com/signalorange/orangeMine
@@ -66,6 +67,10 @@ docker compose up -d
 # test services
 ./tests/dns.sh
 ./tests/wg.sh
+
+## Setup default and secondary routes
+sudo ip route add 0.0.0.0/0 via 172.20.0.10 dev docker0
+sudo ip route add default via ${ETH2_IP} dev ${ETH2} metric 100
 
 # Disable apparmor
 sudo systemctl stop apparmor
