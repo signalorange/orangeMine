@@ -44,9 +44,9 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 
 # TODO
 
-[ ] Implement a working kea dhcp server
+[x] Implement a working kea dhcp server
 [ ] Add a Stork kea webserver
-[ ] Implement a working dns-over-https proxy
+[x] Implement a working dns-over-https/tls proxy
 [ ] Implement a working wireguard vpn
 [ ] Make all LAN (ETH1), Containers & Host traffic go through the VPN (ETH2)
 [ ] Implement a working tailscale server for remote access
@@ -59,3 +59,4 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 [ ] Implement a DATUM Gateway container
 [ ] Create a sensors FastAPI container
 [ ] Implement a Prometheus/Grafana exporter
+[ ] Improve performance with an ipvlan/macvlan networking

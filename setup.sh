@@ -16,6 +16,7 @@ sudo iptables -I FORWARD -s ${SUBNET4} -j ACCEPT
 sudo iptables -I FORWARD -d ${SUBNET4} -j ACCEPT
 sudo iptables -A FORWARD -i ${ETH1} -o ${ETH2} -j ACCEPT
 sudo iptables -A FORWARD -i ${ETH2} -o ${ETH1} -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i ${ETH2} -o ${ETH1} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Set Up NAT
 sudo iptables -t nat -A POSTROUTING -o ${ETH2} -j MASQUERADE

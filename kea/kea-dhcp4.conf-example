@@ -17,11 +17,11 @@
         "option-data": [
           {
             "name": "routers",
-            "data": "10.60.10.3" 
+            "data": "10.60.10.1" 
           },
           {
             "name": "domain-name-servers",
-            "data": "10.60.10.2" 
+            "data": "10.60.10.1" 
           }
         ]
       }
@@ -29,7 +29,7 @@
     "lease-database": {
             "type": "postgresql",
             "name": "kea",
-            "host": "db",
+            "host": "localhost",
             "user": "kea",
             "password": "keatest",
             "connect-timeout": 5,

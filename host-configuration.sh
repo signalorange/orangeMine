@@ -66,3 +66,7 @@ docker compose up -d
 # test services
 ./tests/dns.sh
 ./tests/wg.sh
+
+# Disable apparmor
+sudo systemctl stop apparmor
+sudo systemctl disable apparmor
