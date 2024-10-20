@@ -100,9 +100,10 @@ services:
 networks:
   kea-10:  # Network that binds container to host network interface.
     name: kea-10
-    driver: macvlan
+    driver: ipvlan
     driver_opts:
       parent: ${ETH1}  # Host interface that Kea containers will use (eth1)
+      ipvlan_mode: l3
     enable_ipv6: false
     ipam:
       config:
