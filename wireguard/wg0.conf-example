@@ -12,4 +12,5 @@ AllowedIPs = 10.13.13.2/32
 [Peer]
 # Example Peer 2
 PublicKey = <peer2_public_key>
-AllowedIPs = 10.13.13.3/32
+AllowedIPs = 0.0.0.0/0
+# to act as a router

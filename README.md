@@ -45,17 +45,17 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 # TODO
 
 [ ] Implement a working kea dhcp server
+[ ] Add a Stork kea webserver
 [ ] Implement a working dns-over-https proxy
 [ ] Implement a working wireguard vpn
-[ ] MAke all LAN, Containers & Host traffic go through the VPN
+[ ] Make all LAN (ETH1), Containers & Host traffic go through the VPN (ETH2)
 [ ] Implement a working tailscale server for remote access
-[ ] Add a Stork kea webserver
 [ ] Cleanup the configuration files
 [ ] Investigate a VPN failover solution
 [ ] Investigate a DNS-Over-Https failover solution
 [ ] Create an om-control-center PETAL webserver (to installl, configure, monitor, and manage the services)
 [ ] Create a pyasic FastAPI bridge
-[ ] Implement a fail2ban or other firewall
+[ ] Implement a fail2ban or other firewall (ETH2)
 [ ] Implement a DATUM Gateway container
 [ ] Create a sensors FastAPI container
 [ ] Implement a Prometheus/Grafana exporter

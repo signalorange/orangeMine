@@ -4,3 +4,4 @@ wireguard/wg0.conf
 bind/named.conf.options
 initdb/dhcpdb_create.sql
 bind/named.conf
+.DS_Store
