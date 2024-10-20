@@ -13,7 +13,8 @@ services:
       - type: bind
         source: ./initdb  # Database setup script from kea for the first run
         target: /docker-entrypoint-initdb.d
-    network_mode: host
+    networks:
+      kea-20: 
 
   wireguard:
     image: linuxserver/wireguard
@@ -37,7 +38,8 @@ services:
     #  - "51820:51820/udp"     # WireGuard default port
     #network_mode: host
     networks:
-      local:
+      kea-10: 
+        ipv4_address: ${WG_IP4} 
     restart: always
 
   cloudflared:
@@ -49,7 +51,9 @@ services:
       - UPSTREAM1=https://1.1.1.1/dns-query
       - UPSTREAM2=https://9.9.9.9:5053/dns-query
       - PORT=53
-    network_mode: host
+    networks:
+      kea-10: 
+        ipv4_address: ${DNS_IP4} 
     restart: always
 
   kea:
@@ -58,7 +62,10 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Delay start until the database is healthy
-    network_mode: host
+    networks:
+      kea-10: 
+        ipv4_address: ${KEA_IP4} 
+      kea-20:
     volumes:
       - type: bind
         source: ./kea  # Configuration files for Kea
@@ -67,5 +74,17 @@ services:
     restart: always
 
 networks:
-  local:
-    driver: bridge
+  kea-10:  # Network that binds container to host network interface.
+    name: kea-10
+    driver: ipvlan
+    driver_opts:
+      parent: ${ETH1}  # Host interface that Kea containers will use (eth1)
+      ipvlan_mode: l3
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: ${SUBNET4}  # Subnet for Kea containers
+          gateway: ${GATEWAY4}  # Gateway for Kea subnet
+  kea-20:  # Internal network for communication with database
+    name: kea-20
+
