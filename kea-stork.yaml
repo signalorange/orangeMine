@@ -1,0 +1,98 @@
+services:
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    container_name: db
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U kea -d kea -c 'SELECT version FROM schema_version'"]
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    volumes:
+      - ./database:/var/lib/postgresql
+      - type: bind
+        source: ./initdb  # Database setup script from kea for the first run
+        target: /docker-entrypoint-initdb.d
+    network_mode: host
+
+  kea:
+    image: docker.cloudsmith.io/isc/docker/kea-dhcp4:${KEA_VERSION}
+    container_name: kea
+    depends_on:
+      db:
+        condition: service_healthy  # Delay start until the database is healthy
+    network_mode: host
+    volumes:
+      - type: bind
+        source: ./kea  # Configuration files for Kea
+        target: /etc/kea
+      - ./kea/var:/var/lib/kea  # Persistent data
+    restart: always
+
+  server:
+    restart: always
+    # Explicitly add entries to /etc/hosts for the hosts which are connected
+    # to more than two networks. These explicit entries should be added at the
+    # beginning of the /etc/hosts file enforcing that the connections by hostname
+    # are established with the IP addresses belonging to the storknet network.
+    # Before this change, agents sometimes listened on IP addresses dedicated for
+    # DHCP communication instead.
+    #extra_hosts:
+    #  - "agent-kea:172.24.0.100"
+    #  - "agent-kea6:172.24.0.106"
+    #  - "agent-kea-premium-one:172.24.0.103"
+    image: "${REGISTRY-registry.gitlab.isc.org/isc-projects/stork}/server:latest"
+    network_mode: host
+    ports:
+      - "8088:8080"
+    environment:
+      STORK_DATABASE_HOST: localhost
+      STORK_DATABASE_PORT: 5432
+      STORK_DATABASE_USER_NAME: stork
+      STORK_DATABASE_PASSWORD: stork
+      STORK_DATABASE_NAME: stork
+      STORK_SERVER_ENABLE_METRICS: 1
+    volumes:
+      - ./docker/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+      - ./docker/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
+      - ./docker/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf
+      - ./docker/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
+    depends_on:
+      - db
+
+  webui:
+    restart: always
+    image: "${REGISTRY-registry.gitlab.isc.org/isc-projects/stork}/webui:latest"
+    network_mode: host
+    ports:
+      - "8080:80"
+    environment:
+      API_HOST: server
+      API_PORT: 8080
+    depends_on:
+      - server
+  
+   prometheus:
+    restart: always
+    image: prom/prometheus:v2.32.1
+    network_mode: host
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    restart: always
+    image: grafana/grafana:8.3.7
+    network_mode: host
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./docker/config/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./docker/config/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./docker/config/grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./grafana/kea-dhcp4.json:/var/lib/grafana/dashboards/kea-dhcp4.json
+      - ./grafana/kea-dhcp6.json:/var/lib/grafana/dashboards/kea-dhcp6.json
+      - ./grafana/bind9-resolver.json:/var/lib/grafana/dashboards/bind9-resolver.json
+    depends_on:
+      - prometheus
