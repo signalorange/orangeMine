@@ -64,3 +64,13 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 [ ] Create a sensors FastAPI container
 [ ] Implement a Prometheus/Grafana exporter
 [ ] Improve performance and security with an ipvlan/macvlan networking
+
+# Resources
+
+- https://www.linuxserver.io/blog/routing-docker-host-and-container-traffic-through-wireguard
+- https://stork.readthedocs.io/en/latest/install.html
+- https://one.one.one.one/help/
+- https://github.com/linuxserver/docker-wireguard
+- https://github.com/JonasAlfredsson/docker-kea
+- https://gitlab.isc.org/isc-projects/kea-docker/-/tree/master/kea-compose?ref_type=heads
+- https://arstechnica.com/information-technology/2024/10/finally-upgrading-from-isc-dhcp-server-to-isc-kea-for-my-homelab/?comments-page=1#comments
