@@ -1,16 +1,12 @@
 [Interface]
-Address = 10.13.13.1/24
-SaveConfig = true
 PrivateKey = <server_private_key>
-ListenPort = 51820
+Address = 10.2.0.2/32
+DNS = 1.1.1.1
+PostUp = iptables -t nat -A POSTROUTING -o wg+ -j MASQUERADE
+PreDown = iptables -t nat -D POSTROUTING -o wg+ -j MASQUERADE 
 
 [Peer]
-# Example Peer 1
-PublicKey = <peer1_public_key>
-AllowedIPs = 10.13.13.2/32
-
-[Peer]
-# Example Peer 2
+# CH-CA#1
 PublicKey = <peer2_public_key>
 AllowedIPs = 0.0.0.0/0
-# to act as a router
+Endpoint = <peer2_endpoint>:51820

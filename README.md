@@ -47,16 +47,20 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 [x] Implement a working kea dhcp server
 [ ] Add a Stork kea webserver
 [x] Implement a working dns-over-https/tls proxy
-[ ] Implement a working wireguard vpn
-[ ] Make all LAN (ETH1), Containers & Host traffic go through the VPN (ETH2)
-[ ] Implement a working tailscale server for remote access
+[x] Implement a working wireguard vpn
+[ ] Setup Nat with dynamic docker interface
+[ ] Save routes and iptables
+[x] Make all LAN (ETH1), Containers & Host traffic go through the VPN (ETH2)
+[x] Implement a working tailscale server for remote access
 [ ] Cleanup the configuration files
-[ ] Investigate a VPN failover solution
-[ ] Investigate a DNS-Over-Https failover solution
+[ ] Implement a more stable configuration/start process
+[ ] Document .env and other functions
+[x] Investigate a VPN failover solution
+[x] Investigate a DNS-Over-Https failover solution
 [ ] Create an om-control-center PETAL webserver (to installl, configure, monitor, and manage the services)
 [ ] Create a pyasic FastAPI bridge
 [ ] Implement a fail2ban or other firewall (ETH2)
 [ ] Implement a DATUM Gateway container
 [ ] Create a sensors FastAPI container
 [ ] Implement a Prometheus/Grafana exporter
-[ ] Improve performance with an ipvlan/macvlan networking
+[ ] Improve performance and security with an ipvlan/macvlan networking

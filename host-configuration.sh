@@ -11,7 +11,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 sudo apt update
 sudo apt install docker-ce
 sudo apt upgrade
-sudo aa-remove-unknown
+sudo snap remove docker
 
 sudo groupadd docker
 sudo usermod -aG docker $USER
@@ -69,8 +69,10 @@ docker compose up -d
 ./tests/wg.sh
 
 ## Setup default and secondary routes
-sudo ip route add 0.0.0.0/0 via 172.20.0.10 dev docker0
-sudo ip route add default via ${ETH2_IP} dev ${ETH2} metric 100
+sudo ip route del default
+sudo ip route add 79.135.104.88 via ${NEXTHOP_IP}
+sudo ip route add default via 172.20.0.10
+sudo ip route add default via ${NEXTHOP_IP} metric 200
 
 # Disable apparmor
 sudo systemctl stop apparmor

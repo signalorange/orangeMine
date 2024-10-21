@@ -35,7 +35,7 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
     networks:
       local:
-        ipv4_address: 172.20.0.10
+        ipv4_address: ${WG_BRIDGE_IP}
     ports:
       - "51820:51820/udp"     # WireGuard default port
     #network_mode: host
@@ -67,10 +67,26 @@ services:
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
+  tailscale:
+    image: tailscale/tailscale
+    container_name: tailscale
+    environment:
+      - TAILSCALE_AUTHKEY=${TAILSCALE_AUTHKEY} # Use your Tailscale auth key
+      - TAILSCALE_HOSTNAME=${HOSTNAME}
+      - TAILSCALE_UP=true
+    cap_add:
+      - NET_ADMIN                 # Required for modifying network settings
+      - SYS_MODULE
+    ports:
+      - "41641:41641"             # Tailscale's default port for control
+    network_mode: host
+    restart: always
+
 networks:
   local:
+    name: local
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/24  # Define the subnet for the network
-          gateway: 172.20.0.1     # Define the gateway for the network
+        - subnet: ${WG_BRIDGE_SUBNET}  # Define the subnet for the network
+          gateway: ${WG_BRIDGE_GATEWAY}     # Define the gateway for the network
