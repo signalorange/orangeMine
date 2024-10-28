@@ -43,7 +43,7 @@ services:
     #  - "agent-kea-premium-one:172.24.0.103"
     build:
       context: .
-      dockerfile: server/Dockerfile
+      dockerfile: stork/server/Dockerfile
     network_mode: host
     ports:
       - "8088:8080"
