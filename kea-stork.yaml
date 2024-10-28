@@ -58,6 +58,7 @@ services:
       STORK_REST_PORT: 8080
       STORK_SERVER_HOST: 0.0.0.0
     volumes:
+      - ./stork/server/stork-server.env:/etc/stork/server.env
       - ./stork/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
       - ./stork/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
       - ./stork/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf

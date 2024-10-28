@@ -34,7 +34,7 @@ RUN rake install:server
 RUN mkdir -p /var/lib/stork
 
 # Copy configuration
-COPY stork-server.env /etc/stork/server.env
+#COPY stork-server.env /etc/stork/server.env
 
 # Expose ports
 EXPOSE 8080
