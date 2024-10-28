@@ -41,7 +41,9 @@ services:
     #  - "agent-kea:172.24.0.100"
     #  - "agent-kea6:172.24.0.106"
     #  - "agent-kea-premium-one:172.24.0.103"
-    image: "${REGISTRY-registry.gitlab.isc.org/isc-projects/stork}/server:latest"
+    build:
+      context: .
+      dockerfile: server/Dockerfile
     network_mode: host
     ports:
       - "8088:8080"
@@ -52,34 +54,40 @@ services:
       STORK_DATABASE_PASSWORD: stork
       STORK_DATABASE_NAME: stork
       STORK_SERVER_ENABLE_METRICS: 1
+      STORK_REST_HOST: 0.0.0.0
+      STORK_REST_PORT: 8080
+      STORK_SERVER_HOST: 0.0.0.0
     volumes:
-      - ./docker/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
-      - ./docker/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
-      - ./docker/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf
-      - ./docker/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
+      - ./stork/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+      - ./stork/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
+      - ./stork/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf
+      - ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
     depends_on:
       - db
 
-  webui:
-    restart: always
-    image: "${REGISTRY-registry.gitlab.isc.org/isc-projects/stork}/webui:latest"
-    network_mode: host
-    ports:
-      - "8080:80"
-    environment:
-      API_HOST: server
-      API_PORT: 8080
-    depends_on:
-      - server
+  # webui:
+  #   restart: always
+  #   build:
+  #     context: .
+  #     dockerfile: webui/Dockerfile
+  #   network_mode: host
+  #   ports:
+  #     - "8080:80"
+  #   environment:
+  #     API_HOST: server
+  #     API_PORT: 8080
+  #     REACT_APP_STORK_SERVER_URL: http://localhost:8080
+  #   depends_on:
+  #     - server
   
-   prometheus:
+  prometheus:
     restart: always
     image: prom/prometheus:v2.32.1
     network_mode: host
     ports:
       - "9090:9090"
     volumes:
-      - ./docker/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     restart: always
@@ -88,11 +96,11 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./docker/config/grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./docker/config/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
-      - ./docker/config/grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./grafana/config/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/config/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./grafana/config/grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
       - ./grafana/kea-dhcp4.json:/var/lib/grafana/dashboards/kea-dhcp4.json
-      - ./grafana/kea-dhcp6.json:/var/lib/grafana/dashboards/kea-dhcp6.json
-      - ./grafana/bind9-resolver.json:/var/lib/grafana/dashboards/bind9-resolver.json
+      #- ./grafana/kea-dhcp6.json:/var/lib/grafana/dashboards/kea-dhcp6.json
+      #- ./grafana/bind9-resolver.json:/var/lib/grafana/dashboards/bind9-resolver.json
     depends_on:
       - prometheus

@@ -5,3 +5,5 @@ bind/named.conf.options
 initdb/dhcpdb_create.sql
 bind/named.conf
 .DS_Store
+stork/stork-server.env
+stork/server/stork-server.env
