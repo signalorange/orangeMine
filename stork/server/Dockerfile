@@ -38,6 +38,7 @@ RUN rake install:server DEST=/home/user/stork
 
 # Create necessary directories
 RUN mkdir -p /var/lib/stork
+RUN mkdir -p /usr/lib/stork-agent/hooks
 
 # Copy configuration
 #COPY stork-server.env /etc/stork/server.env
