@@ -34,7 +34,7 @@ services:
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
-  stork:
+  stork-server:
     restart: always
     # Explicitly add entries to /etc/hosts for the hosts which are connected
     # to more than two networks. These explicit entries should be added at the
@@ -73,20 +73,18 @@ services:
     depends_on:
       - db
 
-  # webui:
-  #   restart: always
-  #   build:
-  #     context: .
-  #     dockerfile: webui/Dockerfile
-  #   network_mode: host
-  #   ports:
-  #     - "8080:80"
-  #   environment:
-  #     API_HOST: server
-  #     API_PORT: 8080
-  #     REACT_APP_STORK_SERVER_URL: http://localhost:8080
-  #   depends_on:
-  #     - server
+  stork-agent:
+    image: registry.gitlab.isc.org/isc-projects/stork/agent:latest
+    networks:
+      - kea-stork-network
+    environment:
+      - STORK_AGENT_SERVER_URL=http://localhost:8088
+      - STORK_AGENT_HOST=kea
+    volumes:
+      - /tmp:/tmp  # Required for accessing Kea's control socket
+    depends_on:
+      - stork-server
+      - kea
   
   prometheus:
     restart: always
