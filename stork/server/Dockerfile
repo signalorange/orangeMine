@@ -32,7 +32,7 @@ RUN rake build
 RUN rake install:server
 
 # Create necessary directories
-RUN mkdir -p /var/lib/stork
+RUN mkdir -p /var/lib/stork DEST=/home/user/stork
 
 # Copy configuration
 #COPY stork-server.env /etc/stork/server.env
