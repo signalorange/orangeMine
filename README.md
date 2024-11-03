@@ -65,6 +65,10 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Create a sensors FastAPI container
 - [ ] Implement a Prometheus/Grafana exporter
 - [ ] Improve performance and security with an ipvlan/macvlan networking
+- [ ] GPS/GIS location tracking
+- [ ] Electricty cost module
+- [ ] Temperature monitoring (inside and outside)
+- [ ] Weather monitoring
 
 # Resources
 

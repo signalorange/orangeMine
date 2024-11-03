@@ -29,7 +29,7 @@ services:
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
-  server:
+  stork:
     restart: always
     # Explicitly add entries to /etc/hosts for the hosts which are connected
     # to more than two networks. These explicit entries should be added at the
