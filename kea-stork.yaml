@@ -49,6 +49,7 @@ services:
     build:
       context: .
       dockerfile: stork/server/Dockerfile
+    container_name: stork-server
     network_mode: host
     environment:
       - STORK_DATABASE_HOST=localhost
@@ -77,10 +78,11 @@ services:
     build:
       context: .
       dockerfile: stork/agent/Dockerfile
+    container_name: stork-agent
     network_mode: host
     environment:
       - STORK_AGENT_SERVER_URL=http://localhost:8088
-      - STORK_AGENT_HOST=kea
+      - STORK_AGENT_HOST=localhost
     volumes:
       - /tmp:/tmp  # Required for accessing Kea's control socket
     depends_on:
@@ -90,6 +92,7 @@ services:
   prometheus:
     restart: always
     image: prom/prometheus:v2.32.1
+    container_name: prometheus
     network_mode: host
     environment:
       - TZ=${TZ}
@@ -102,6 +105,7 @@ services:
   grafana:
     restart: always
     image: grafana/grafana:8.3.7
+    container_name: grafana
     network_mode: host
     environment:
       - TZ=${TZ}
