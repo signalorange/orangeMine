@@ -63,9 +63,9 @@ services:
       - STORK_SERVER_HOST=0.0.0.0
       - STORK_SERVER_DISABLE_TLS=true    # Disable TLS requirement
       - STORK_REST_DISABLE_TLS=true
-      - STORK_REST_TLS_CERTIFICATE=""
-      - STORK_REST_TLS_PRIVATE_KEY=""
-      - STORK_REST_TLS_CA_CERTIFICATE=""
+      #- STORK_REST_TLS_CERTIFICATE=""
+      #- STORK_REST_TLS_PRIVATE_KEY=""
+      #- STORK_REST_TLS_CA_CERTIFICATE=""
       - TZ=${TZ}
       - DEBIAN_FRONTEND=noninteractive
     volumes:
