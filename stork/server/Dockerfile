@@ -31,8 +31,8 @@ RUN git clone https://gitlab.isc.org/isc-projects/stork.git . && \
 RUN rake build 
 
 # setup db
-RUN backend/cmd/stork-db-migrate/stork-db-migrate init
-RUN backend/cmd/stork-db-migrate/stork-db-migrate up
+#RUN backend/cmd/stork-db-migrate/stork-db-migrate init
+#RUN backend/cmd/stork-db-migrate/stork-db-migrate up
 
 RUN rake install:server DEST=/home/user/stork
 
