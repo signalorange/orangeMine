@@ -74,7 +74,7 @@ services:
       - db
 
   stork-agent:
-     build:
+    build:
       context: .
       dockerfile: stork/agent/Dockerfile
     network_mode: host
