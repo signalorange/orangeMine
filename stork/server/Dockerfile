@@ -33,7 +33,7 @@ RUN rake build
 # setup db
 #RUN backend/cmd/stork-db-migrate/stork-db-migrate init
 #RUN backend/cmd/stork-db-migrate/stork-db-migrate up
-RUN rake install:agent
+RUN rake install:agent DEST=/home/user/stork
 
 RUN rake install:server DEST=/home/user/stork
 
