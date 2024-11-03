@@ -62,6 +62,10 @@ services:
       - STORK_REST_PORT=8088
       - STORK_SERVER_HOST=0.0.0.0
       - STORK_SERVER_DISABLE_TLS=true    # Disable TLS requirement
+      - STORK_REST_DISABLE_TLS=true
+      - STORK_REST_TLS_CERTIFICATE=""
+      - STORK_REST_TLS_PRIVATE_KEY=""
+      - STORK_REST_TLS_CA_CERTIFICATE=""
       - TZ=${TZ}
       - DEBIAN_FRONTEND=noninteractive
     volumes:
@@ -72,6 +76,7 @@ services:
       - ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - stork-server-certs:/var/lib/stork-server/certs
     depends_on:
       - db
 
@@ -90,12 +95,14 @@ services:
       - STORK_AGENT_LISTEN_STORK_ONLY=true
       - STORK_AGENT_LISTEN_PROMETHEUS_ONLY=false
       - STORK_AGENT_SKIP_TLS_CERT_VERIFICATION=true
-      #- STORK_AGENT_PROMETHEUS_KEA_EXPORTER_ADDRESS=0.0.0.0:9547
-      #- STORK_AGENT_PROMETHEUS_KEA_EXPORTER_PORT=9547
+      - STORK_AGENT_PROMETHEUS_KEA_EXPORTER_PORT=9547
+      - STORK_AGENT_PROMETHEUS_KEA_EXPORTER_ADDRESS=0.0.0.0:9547
+      - STORK_AGENT_CREDENTIALS_FILE=/etc/stork/agent-credentials.json
       - STORK_AGENT_KEA_CA_PORT=8888  # Explicitly set Kea CA port
       - STORK_AGENT_KEA_ACCESS_POINTS=[{"type":"control","address":"http://localhost:8888","key":""}]  # Explicitly tell agent where to find Kea
     volumes:
       - /tmp:/tmp  # Required for accessing Kea's control socket
+      - stork-agent-certs:/var/lib/stork-agent/certs
     depends_on:
       - stork-server
       - kea
@@ -132,3 +139,7 @@ services:
       #- ./grafana/bind9-resolver.json:/var/lib/grafana/dashboards/bind9-resolver.json
     depends_on:
       - prometheus
+    
+volumes:
+  stork-agent-certs:
+  stork-server-certs:
