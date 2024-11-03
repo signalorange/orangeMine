@@ -1,5 +1,5 @@
 # Base image with Debian
-FROM ubuntu:20.04-slim
+FROM ubuntu:24.04
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
