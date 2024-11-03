@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
     golang \
     rake \
     ruby-dev \
-    python3.11 \
-    python3.11-venv \
+    python3 \
+    python3-venv \
     openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
