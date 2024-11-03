@@ -11,6 +11,8 @@ services:
     #  - PEERS=5               # Number of WireGuard peers
       - DEBUG=1               # Enable debug logging
       - PEERDNS=1.1.1.1       # DNS resolver for clients
+      - TZ=${TZ}
+      - DEBIAN_FRONTEND=noninteractive
     volumes:
       - ./wireguard:/config/wg_confs
     cap_add:
@@ -36,6 +38,8 @@ services:
       - UPSTREAM1=https://1.1.1.1/dns-query
       - UPSTREAM2=https://9.9.9.9:5053/dns-query
       - PORT=53
+      - TZ=${TZ}
+      - DEBIAN_FRONTEND=noninteractive
     network_mode: host
     restart: always
 
@@ -46,6 +50,8 @@ services:
       - TAILSCALE_AUTHKEY=${TAILSCALE_AUTHKEY} # Use your Tailscale auth key
       - TAILSCALE_HOSTNAME=${HOSTNAME}
       - TAILSCALE_UP=true
+      - TZ=${TZ}
+      - DEBIAN_FRONTEND=noninteractive
     cap_add:
       - NET_ADMIN                 # Required for modifying network settings
       - SYS_MODULE
