@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     ruby-dev \
     python3 \
     python3-venv \
+    python3-sphinx-rtd-theme \
     openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +25,7 @@ WORKDIR /stork
 
 # Clone Stork repository
 RUN git clone https://gitlab.isc.org/isc-projects/stork.git . && \
-    git checkout v1.15.1
+    git checkout v1.19.0
 
 # Install backend dependencies and build
 RUN rake build 

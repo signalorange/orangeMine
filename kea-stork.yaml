@@ -63,6 +63,8 @@ services:
       - ./stork/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
       - ./stork/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf
       - ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
       - db
 
