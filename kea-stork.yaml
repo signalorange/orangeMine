@@ -81,7 +81,7 @@ services:
     container_name: stork-agent
     network_mode: host
     environment:
-      - STORK_AGENT_SERVER_URL=http://localhost:8080
+      - STORK_AGENT_SERVER_URL=http://localhost:8088
       - STORK_AGENT_HOST=localhost
       - STORK_AGENT_SKIP_TLS_CERT_VERIFICATION=true
       - STORK_AGENT_PROMETHEUS_KEA_EXPORTER_ADDRESS=0.0.0.0:9547
