@@ -29,6 +29,11 @@ RUN git clone https://gitlab.isc.org/isc-projects/stork.git . && \
 
 # Install backend dependencies and build
 RUN rake build 
+
+# setup db
+RUN backend/cmd/stork-db-migrate/stork-db-migrate init
+RUN backend/cmd/stork-db-migrate/stork-db-migrate up
+
 RUN rake install:server DEST=/home/user/stork
 
 # Create necessary directories
@@ -36,7 +41,6 @@ RUN mkdir -p /var/lib/stork
 
 # Copy configuration
 #COPY stork-server.env /etc/stork/server.env
-
 # Expose ports
 EXPOSE 8080
 
