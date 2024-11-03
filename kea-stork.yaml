@@ -91,12 +91,12 @@ services:
       - STORK_AGENT_PORT=8081
       - STORK_AGENT_LISTEN_ADDRESS=0.0.0.0     # Listen on all interfaces
       - STORK_AGENT_LISTEN_PORT=8081 
-      - STORK_AGENT_LISTEN_STORK_ONLY=true
-      - STORK_AGENT_LISTEN_PROMETHEUS_ONLY=false
-      - STORK_AGENT_SKIP_TLS_CERT_VERIFICATION=true
-      - STORK_AGENT_PROMETHEUS_KEA_EXPORTER_PORT=9547
-      - STORK_AGENT_PROMETHEUS_KEA_EXPORTER_ADDRESS=0.0.0.0:9547
-      - STORK_AGENT_KEA_CA_PORT=8888  # Explicitly set Kea CA port
+      #- STORK_AGENT_LISTEN_STORK_ONLY=true
+      #- STORK_AGENT_LISTEN_PROMETHEUS_ONLY=false
+      #- STORK_AGENT_SKIP_TLS_CERT_VERIFICATION=true
+      #- STORK_AGENT_PROMETHEUS_KEA_EXPORTER_PORT=9547
+      #- STORK_AGENT_PROMETHEUS_KEA_EXPORTER_ADDRESS=0.0.0.0:9547
+      #- STORK_AGENT_KEA_CA_PORT=8888  # Explicitly set Kea CA port
       - STORK_AGENT_KEA_ACCESS_POINTS=[{"type":"control","address":"http://localhost:8888","key":""}]  # Explicitly tell agent where to find Kea
     volumes:
       - /tmp:/tmp  # Required for accessing Kea's control socket
