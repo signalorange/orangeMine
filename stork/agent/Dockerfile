@@ -33,8 +33,7 @@ RUN rake build
 # setup db
 #RUN backend/cmd/stork-db-migrate/stork-db-migrate init
 #RUN backend/cmd/stork-db-migrate/stork-db-migrate up
-
-RUN rake install:server DEST=/home/user/stork
+RUN rake install:agent DEST=/home/user/stork
 
 # Create necessary directories
 RUN mkdir -p /var/lib/stork
@@ -42,7 +41,7 @@ RUN mkdir -p /var/lib/stork
 # Copy configuration
 #COPY stork-server.env /etc/stork/server.env
 # Expose ports
-EXPOSE 8080
+EXPOSE 8000
 
 # Set environment variables
 ENV STORK_DATABASE_HOST=localhost \
@@ -52,4 +51,4 @@ ENV STORK_DATABASE_HOST=localhost \
     STORK_DATABASE_PASSWORD=stork
 
 # Start Stork server
-CMD rake run:server
+CMD rake run:agent

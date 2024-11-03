@@ -74,7 +74,9 @@ services:
       - db
 
   stork-agent:
-    image: registry.gitlab.isc.org/isc-projects/stork/agent:latest
+     build:
+      context: .
+      dockerfile: stork/agent/Dockerfile
     network_mode: host
     environment:
       - STORK_AGENT_SERVER_URL=http://localhost:8088
