@@ -84,6 +84,8 @@ services:
       - STORK_AGENT_SERVER_URL=http://localhost:8088
       - STORK_AGENT_HOST=localhost
       - STORK_AGENT_PORT=8081
+      - STORK_AGENT_LISTEN_ADDRESS=0.0.0.0     # Listen on all interfaces
+      - STORK_AGENT_LISTEN_PORT=8081 
       - STORK_AGENT_LISTEN_STORK_ONLY=true
       - STORK_AGENT_LISTEN_PROMETHEUS_ONLY=false
       - STORK_AGENT_SKIP_TLS_CERT_VERIFICATION=true
