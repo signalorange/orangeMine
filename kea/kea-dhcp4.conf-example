@@ -1,52 +1,76 @@
 {
   "Dhcp4": {
     "interfaces-config": {
-            "interfaces": [ "eth0" ],
-            "dhcp-socket-type": "raw"
-        },
-        "valid-lifetime": 4000,
-        "renew-timer": 1000,
-        "rebind-timer": 2000,
+        "interfaces": [ "eth0" ],
+        "dhcp-socket-type": "raw"
+    },
+    "control-socket": {
+        "socket-type": "unix",
+        "socket-name": "/tmp/kea-dhcp4-ctrl.sock"
+    },
+    "valid-lifetime": 4000,
+    "renew-timer": 1000,
+    "rebind-timer": 2000,
     "subnet4": [
-      {
-        "id": 1,
-        "subnet": "10.60.10.0/24",
-        "pools": [
-          { "pool": "10.60.10.10 - 10.60.10.253" }
-        ],
-        "option-data": [
-          {
-            "name": "routers",
-            "data": "10.60.10.1" 
-          },
-          {
-            "name": "domain-name-servers",
-            "data": "10.60.10.1, 1.1.1.1" 
-          }
-        ]
-      }
+        {
+            "id": 1,
+            "subnet": "10.60.10.0/24",
+            "pools": [
+            { "pool": "10.60.10.10 - 10.60.10.253" }
+            ],
+            "option-data": [
+            {
+                "name": "routers",
+                "data": "10.60.10.1" 
+            },
+            {
+                "name": "domain-name-servers",
+                "data": "10.60.10.1, 1.1.1.1" 
+            }
+            ]
+        }
     ],
     "lease-database": {
-            "type": "postgresql",
-            "name": "kea",
-            "host": "localhost",
-            "user": "kea",
-            "password": "keatest",
-            "connect-timeout": 5,
-            "max-reconnect-tries": 10,
-            "reconnect-wait-time": 100
-        },
-        "loggers": [
-            {
-                "name": "kea-dhcp4",
-                "output_options": [
-                    {
-                        "output": "stdout",
-                        "pattern": "%D{%Y-%m-%d %H:%M:%S.%q} %-5p [%c/%i.%t] %m\n"
-                    }
-                ],
-                "severity": "INFO"
+        "type": "postgresql",
+        "name": "kea",
+        "host": "localhost",
+        "user": "kea",
+        "password": "keatest",
+        "connect-timeout": 5,
+        "max-reconnect-tries": 10,
+        "reconnect-wait-time": 100
+    },
+  },
+    "Dhcp4-config": {
+        "config-control": {
+            "config-databases": [{
+                "type": "postgresql",
+                "name": "stork",
+                "user": "stork",
+                "password": "stork123",
+                "host": "localhost"
+            }],
+            "config-fetch-wait-time": 20
+        }
+    },
+    "Control-agent": {
+        "http-host": "0.0.0.0",
+        "http-port": 8888,
+        "control-sockets": {
+            "dhcp4": {
+                "socket-type": "unix",
+                "socket-name": "/tmp/kea-dhcp4-ctrl.sock"
             }
-        ]
-  }
+        },
+        "hooks-libraries": [{
+            "library": "/usr/lib/x86_64-linux-gnu/kea/hooks/libclass_cmds.so"
+        }],
+        "loggers": [{
+            "name": "kea-ctrl-agent",
+            "severity": "DEBUG",
+            "output_options": [{
+                "output": "stdout"
+            }]
+        }]
+    }
 }
