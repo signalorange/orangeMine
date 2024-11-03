@@ -29,10 +29,10 @@ RUN git clone https://gitlab.isc.org/isc-projects/stork.git . && \
 
 # Install backend dependencies and build
 RUN rake build 
-RUN rake install:server
+RUN rake install:server DEST=/home/user/stork
 
 # Create necessary directories
-RUN mkdir -p /var/lib/stork DEST=/home/user/stork
+RUN mkdir -p /var/lib/stork
 
 # Copy configuration
 #COPY stork-server.env /etc/stork/server.env
