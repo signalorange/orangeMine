@@ -2,55 +2,11 @@
 FROM ubuntu:24.04
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    gnupg2 \
-    wget \
-    git \
-    build-essential \
-    golang \
-    rake \
-    ruby-dev \
-    python3 \
-    python3-venv \
-    python3-sphinx-rtd-theme \
-    openjdk-17-jre-headless \
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/isc/stork/cfg/setup/bash.deb.sh' | sudo bash
+RUN apt-get update 
+RUN apt-get install isc-stork-server
     && rm -rf /var/lib/apt/lists/*
 
-# Install Rake
-RUN gem install rake
-
-# Set working directory
-WORKDIR /stork
-
-# Clone Stork repository
-RUN git clone https://gitlab.isc.org/isc-projects/stork.git . && \
-    git checkout v1.19.0
-
-# Install backend dependencies and build
-RUN rake build 
-
-# setup db
-#RUN backend/cmd/stork-db-migrate/stork-db-migrate init
-#RUN backend/cmd/stork-db-migrate/stork-db-migrate up
-
-RUN rake install:server DEST=/home/user/stork
-
-# Create necessary directories
-RUN mkdir -p /var/lib/stork
-RUN mkdir -p /usr/lib/stork-agent/hooks
-
-# Copy configuration
-#COPY stork-server.env /etc/stork/server.env
-# Expose ports
-EXPOSE 8080
-
-# Set environment variables
-ENV STORK_DATABASE_HOST=localhost \
-    STORK_DATABASE_PORT=5432 \
-    STORK_DATABASE_NAME=stork \
-    STORK_DATABASE_USER_NAME=stork \
-    STORK_DATABASE_PASSWORD=stork
-
+COPY stork-server.env /etc/stork/server.env
 # Start Stork server
-CMD rake run:server
+CMD ["stork-server", "--use-env-file=/etc/stork/server.env"]

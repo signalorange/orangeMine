@@ -31,6 +31,9 @@ services:
       - type: bind
         source: ./kea  # Configuration files for Kea
         target: /etc/kea
+      - type: bind
+        source: ./kea-temp  # Configuration files for Kea
+        target: /temp
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
@@ -52,20 +55,6 @@ services:
     container_name: stork-server
     network_mode: host
     environment:
-      - STORK_DATABASE_HOST=localhost
-      - STORK_DATABASE_PORT=5432
-      - STORK_DATABASE_USER_NAME=${POSTGRES_USER}
-      - STORK_DATABASE_PASSWORD=${POSTGRES_PASSWORD}
-      - STORK_DATABASE_NAME=kea
-      - STORK_SERVER_ENABLE_METRICS=1
-      - STORK_REST_HOST=0.0.0.0
-      - STORK_REST_PORT=8088
-      - STORK_SERVER_HOST=0.0.0.0
-      - STORK_SERVER_DISABLE_TLS=true    # Disable TLS requirement
-      - STORK_REST_DISABLE_TLS=true
-      #- STORK_REST_TLS_CERTIFICATE=""
-      #- STORK_REST_TLS_PRIVATE_KEY=""
-      #- STORK_REST_TLS_CA_CERTIFICATE=""
       - TZ=${TZ}
       - DEBIAN_FRONTEND=noninteractive
     volumes:
@@ -76,6 +65,7 @@ services:
       - ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./stork/server/stork-server.env:/etc/stork/server.env
     depends_on:
       - db
 
@@ -86,18 +76,12 @@ services:
     container_name: stork-agent
     network_mode: host
     environment:
-      - STORK_AGENT_SERVER_URL=http://localhost:8088
-      - STORK_AGENT_HOST=localhost
-      - STORK_AGENT_LISTEN_ADDRESS=0.0.0.0     # Listen on all interfaces
-      - STORK_AGENT_LISTEN_STORK_ONLY=true
-      - STORK_AGENT_LISTEN_PROMETHEUS_ONLY=false
-      - STORK_AGENT_SKIP_TLS_CERT_VERIFICATION=true
-      #- STORK_AGENT_PROMETHEUS_KEA_EXPORTER_PORT=9547
-      #- STORK_AGENT_PROMETHEUS_KEA_EXPORTER_ADDRESS=0.0.0.0:9547
-      - STORK_AGENT_KEA_CA_PORT=8000  # Explicitly set Kea CA port
-      - STORK_AGENT_KEA_ACCESS_POINTS=[{"type":"control","address":"http://localhost:8000","key":""}]  # Explicitly tell agent where to find Kea
-    #volumes:
-    #  - /tmp:/tmp  # Required for accessing Kea's control socket
+      - TZ=${TZ}
+      - DEBIAN_FRONTEND=noninteractive
+    volumes:
+      - type: bind
+        source: ./kea-temp  # Configuration files for Kea
+        target: /temp  # Required for accessing Kea's control socket
     depends_on:
       - stork-server
       - kea
