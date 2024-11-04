@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 # Install system dependencies
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/isc/stork/cfg/setup/bash.deb.sh' | sudo bash
 RUN apt-get update 
-RUN apt-get install isc-stork-server
+RUN apt-get install isc-stork-server \
     && rm -rf /var/lib/apt/lists/*
 
 COPY server.env /etc/stork/server.env
