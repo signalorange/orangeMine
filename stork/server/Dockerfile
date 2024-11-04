@@ -7,6 +7,6 @@ RUN apt-get update
 RUN apt-get install isc-stork-server
     && rm -rf /var/lib/apt/lists/*
 
-COPY stork-server.env /etc/stork/server.env
+COPY server.env /etc/stork/server.env
 # Start Stork server
 CMD ["stork-server", "--use-env-file=/etc/stork/server.env"]

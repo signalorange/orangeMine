@@ -65,7 +65,7 @@ services:
       - ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./stork/server/stork-server.env:/etc/stork/server.env
+      - ./stork/server/server.env:/etc/stork/server.env
     depends_on:
       - db
 
@@ -82,6 +82,9 @@ services:
       - type: bind
         source: ./kea-temp  # Configuration files for Kea
         target: /temp  # Required for accessing Kea's control socket
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./stork/agent/agent.env:/etc/stork/agent.env
     depends_on:
       - stork-server
       - kea

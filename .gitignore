@@ -7,3 +7,5 @@ bind/named.conf
 .DS_Store
 stork/stork-server.env
 stork/server/stork-server.env
+stork/agent/agent.env
+stork/server/server.env
