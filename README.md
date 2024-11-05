@@ -70,6 +70,8 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Temperature monitoring (inside and outside)
 - [ ] Weather monitoring
 - [ ] find a way to easily split between hybrid (every services) and split (clients and control-center) easily
+- [ ] Implement a backup system
+- [ ] build docker images for kea, stork
 
 # Resources
 
