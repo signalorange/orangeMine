@@ -51,6 +51,10 @@
                 ],
                 "severity": "INFO"
             }
-        ]
+        ],
+    "hooks-libraries": [ 
+        { "library": "/usr/local/lib/kea/hooks/libdhcp_stat_cmds.so" },
+        { "library": "/usr/local/lib/kea/hooks/libdhcp_lease_cmds.so" }
+         ]
   }
 }
