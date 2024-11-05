@@ -34,7 +34,6 @@ services:
       - type: bind
         source: ./kea/config  # Configuration files for Kea
         target: /etc/kea
-      - kea-socket:/tmp  # Shared volume for control socket
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
@@ -102,6 +101,3 @@ services:
       #- ./grafana/bind9-resolver.json:/var/lib/grafana/dashboards/bind9-resolver.json
     depends_on:
       - prometheus
-    
-volumes:
-  kea-socket:  # Named volume for the control socket
