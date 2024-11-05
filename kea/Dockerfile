@@ -14,10 +14,14 @@ RUN mkdir -p /usr/lib/stork-agent/hooks
 
 COPY config/agent.env /etc/stork/agent.env
 # Start Stork server
-RUN stork-agent --use-env-file --env-file=/etc/stork/agent.env &
+#RUN stork-agent --use-env-file --env-file=/etc/stork/agent.env &
 
 COPY config/*.conf /etc/kea/*.conf
 
-RUN kea-ctrl-agent -c /etc/kea/kea-ctrl-agent.conf &
+#RUN kea-ctrl-agent -c /etc/kea/kea-ctrl-agent.conf &
 #CMD ["kea-ctrl-agent", "-c", "/etc/kea/kea-ctrl-agent.conf"]
-CMD ["kea-dhcp4", "-c", "/etc/kea/kea-dhcp4.conf"]
+
+COPY config/start.sh /start.sh
+RUN chmod +x start.sh
+
+ENTRYPOINT ["/start.sh"]
