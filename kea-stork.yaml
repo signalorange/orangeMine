@@ -31,9 +31,7 @@ services:
       - type: bind
         source: ./kea  # Configuration files for Kea
         target: /etc/kea
-      - type: bind
-        source: ./kea-temp  # Configuration files for Kea
-        target: /temp
+      - kea-socket:/tmp  # Shared volume for control socket
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
@@ -79,9 +77,7 @@ services:
       - TZ=${TZ}
       - DEBIAN_FRONTEND=noninteractive
     volumes:
-      - type: bind
-        source: ./kea-temp  # Configuration files for Kea
-        target: /temp  # Required for accessing Kea's control socket
+      - kea-socket:/tmp  # Mount same socket volume
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./stork/agent/agent.env:/etc/stork/agent.env
@@ -122,3 +118,5 @@ services:
     depends_on:
       - prometheus
     
+volumes:
+  kea-socket:  # Named volume for the control socket

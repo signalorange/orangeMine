@@ -9,7 +9,7 @@ RUN apt-get update \
     && apt-get install isc-stork-agent \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /usr/lib/stork-server/hooks
+RUN mkdir -p /usr/lib/stork-agent/hooks
 
 COPY agent.env /etc/stork/agent.env
 # Start Stork server
