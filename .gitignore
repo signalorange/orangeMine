@@ -1,4 +1,4 @@
-kea/kea-dhcp4.conf
+kea/config/kea-dhcp4.conf
 wireguard/wg0.conf
 .env
 bind/named.conf.options
@@ -9,3 +9,4 @@ stork/stork-server.env
 stork/server/stork-server.env
 stork/agent/agent.env
 stork/server/server.env
+kea/config/agent.env

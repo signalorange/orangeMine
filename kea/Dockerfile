@@ -23,5 +23,6 @@ COPY config/*.conf /etc/kea/*.conf
 
 COPY config/start.sh /start.sh
 RUN chmod +x start.sh
-
-ENTRYPOINT ["/start.sh"]
+#CMD ["kea-dhcp4", "-c", "/etc/kea/kea-dhcp4.conf"]
+#CMD ["kea-ctrl-agent", "-c", "/etc/kea/kea-ctrl-agent.conf"]
+CMD ["/start.sh"]
