@@ -69,6 +69,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Electricty cost module
 - [ ] Temperature monitoring (inside and outside)
 - [ ] Weather monitoring
+- [ ] find a way to easily split between hybrid (every services) and split (clients and control-center) easily
 
 # Resources
 
