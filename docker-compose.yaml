@@ -6,4 +6,5 @@ services:
     image: signalorange/pyasic-api
     ports:
       - "9000:9000"
+    network_mode: host
     restart: unless-stopped
