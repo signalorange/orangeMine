@@ -10,3 +10,4 @@ stork/server/stork-server.env
 stork/agent/agent.env
 stork/server/server.env
 kea/config/agent.env
+stork/config/server.env

@@ -34,7 +34,7 @@ services:
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
-  stork-server:
+  stork:
     restart: always
     # Explicitly add entries to /etc/hosts for the hosts which are connected
     # to more than two networks. These explicit entries should be added at the
@@ -46,23 +46,20 @@ services:
     #  - "agent-kea:172.24.0.100"
     #  - "agent-kea6:172.24.0.106"
     #  - "agent-kea-premium-one:172.24.0.103"
-    build:
-      context: stork/server
-      dockerfile: Dockerfile
-    container_name: stork-server
+    image: signalorange/stork:ubuntu24.04-1.19.0
+    container_name: stork
     network_mode: host
     environment:
       - TZ=${TZ}
       - DEBIAN_FRONTEND=noninteractive
     volumes:
-      - ./stork/server/stork-server.env:/etc/stork/server.env
+      - ./stork/config/server.env:/etc/stork/server.env
       - ./stork/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
       - ./stork/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
       - ./stork/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf
       - ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./stork/server/server.env:/etc/stork/server.env
     depends_on:
       - db
   
