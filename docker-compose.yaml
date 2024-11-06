@@ -3,8 +3,10 @@ include:
   - networking.yaml
 services:
   pyasic-api:
-    image: signalorange/pyasic-api
+    image: signalorange/pyasic-api:latest
     ports:
       - "9000:9000"
     network_mode: host
     restart: unless-stopped
+    environment:
+      - SCAN_SUBNETS=${SUBNET4}
