@@ -45,33 +45,41 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 
 # TODO
 
-- [x] Implement a working kea dhcp server
-- [ ] Add a Stork kea webserver
-- [x] Implement a working dns-over-https/tls proxy
-- [x] Implement a working wireguard vpn
+### Networking:
+
 - [ ] Setup Nat with dynamic docker interface
 - [ ] Save routes and iptables
+- [x] Implement a working kea dhcp server
+- [ ] Add a Stork kea webserver (leases)
+- [x] Implement a working dns-over-https/tls proxy
+- [x] Implement a working wireguard vpn
 - [x] Make all LAN (ETH1), Containers & Host traffic go through the VPN (ETH2)
 - [x] Implement a working tailscale server for remote access
+- [x] Investigate a VPN failover solution
+- [x] Investigate a DNS-Over-Https failover solution
+- [ ] Implement a fail2ban or other firewall (ETH2)
+- [ ] Improve performance and security with an ipvlan/macvlan networking
+
+### Config/Housekeeping:
+
 - [ ] Cleanup the configuration files
 - [ ] Implement a more stable configuration/start process
 - [ ] Document .env and other functions
-- [x] Investigate a VPN failover solution
-- [x] Investigate a DNS-Over-Https failover solution
-- [ ] Create an om-control-center PETAL webserver (to installl, configure, monitor, and manage the services)
+- [ ] find a way to easily split between hybrid (every services) and split (clients and control-center) easily -> Harvest/Orchard
+- [ ] Implement a backup system
+- [x] build docker images for kea & stork
+
+### Services and Features:
+
+- [ ] Create an om-control-center PETAL webserver (to installl, configure, monitor, and manage the services) -> Harvest
 - [ ] Create a pyasic FastAPI bridge
-- [ ] Implement a fail2ban or other firewall (ETH2)
-- [ ] Implement a DATUM Gateway container
+- [ ] Implement a DATUM Gateway container -> docker-datum-gateway
 - [ ] Create a sensors FastAPI container
 - [ ] Implement a Prometheus/Grafana exporter
-- [ ] Improve performance and security with an ipvlan/macvlan networking
 - [ ] GPS/GIS location tracking
 - [ ] Electricty cost module
 - [ ] Temperature monitoring (inside and outside)
 - [ ] Weather monitoring
-- [ ] find a way to easily split between hybrid (every services) and split (clients and control-center) easily
-- [ ] Implement a backup system
-- [ ] build docker images for kea, stork
 
 # Resources
 
