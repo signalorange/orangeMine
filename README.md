@@ -50,7 +50,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Setup Nat with dynamic docker interface
 - [ ] Save routes and iptables
 - [x] Implement a working kea dhcp server
-- [ ] Add a Stork kea webserver (leases)
+- [x] Add a Stork webserver
 - [x] Implement a working dns-over-https/tls proxy
 - [x] Implement a working wireguard vpn
 - [x] Make all LAN (ETH1), Containers & Host traffic go through the VPN (ETH2)
@@ -59,14 +59,18 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [x] Investigate a DNS-Over-Https failover solution
 - [ ] Implement a fail2ban or other firewall (ETH2)
 - [ ] Improve performance and security with an ipvlan/macvlan networking
+- [ ] Add network traffic monitoring and bandwidth management
+- [ ] Add a speedtest monitoring tool
 
 ### Config/Housekeeping:
 
 - [ ] Cleanup the configuration files
 - [ ] Implement a more stable configuration/start process
 - [ ] Document .env and other functions
-- [ ] find a way to easily split between hybrid (every services) and split (clients and control-center) easily -> Harvest/Orchard
+- [x] find a way to easily split between hybrid (every services) and split (clients and control-center) easily -> Harvest/Orchard
 - [ ] Implement a backup system
+- [ ] Add automated database backups for Kea DHCP
+- [ ] Add automated health checks for all services
 - [x] build docker images for kea & stork
 
 ### Services and Features:
@@ -74,12 +78,33 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Create an om-control-center PETAL webserver (to installl, configure, monitor, and manage the services) -> Harvest
 - [ ] Create a pyasic FastAPI bridge
 - [ ] Implement a DATUM Gateway container -> docker-datum-gateway
-- [ ] Create a sensors FastAPI container
+- [ ] Create a sensors FastAPI/Phoenix container
 - [ ] Implement a Prometheus/Grafana exporter
 - [ ] GPS/GIS location tracking
-- [ ] Electricty cost module
+- [ ] Electricty cost module (Add integration with power grid APIs for dynamic pricing)
 - [ ] Temperature monitoring (inside and outside)
 - [ ] Weather monitoring
+
+### Harvest ideas (local client):
+
+- [ ] Add power consumption optimization module
+- [ ] Implement automated firmware management for miners
+- [ ] Implement real-time hash rate optimization
+- [ ] Create automated emergency shutdown procedures
+- [ ] Add dynamic overclocking based on environmental conditions
+- [ ] Implement automated ROI calculator per machine/rack
+- [ ] Set up automated reboot scheduling based on performance metrics
+
+
+## Orchard ideas (remote control center):
+
+- [ ] Create an alert system for network/miner issues
+- [ ] Create a maintenance scheduling system
+- [ ] Add multi-site management capabilities
+- [ ] Create automated reporting system for operations
+- [ ] Implement predictive maintenance based on performance metrics
+- [ ] Set up inventory management for spare parts
+- [ ] Create maintenance log system with photo documentation
 
 # Resources
 
