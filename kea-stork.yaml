@@ -18,10 +18,7 @@ services:
     network_mode: host
 
   kea:
-    #image: docker.cloudsmith.io/isc/docker/kea-dhcp4:${KEA_VERSION}
-    build:
-      context: kea
-      dockerfile: Dockerfile
+    image: signalorange/kea:ubuntu24.04-2.6
     container_name: kea
     depends_on:
       db:
