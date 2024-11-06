@@ -76,7 +76,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 ### Services and Features:
 
 - [ ] Create an om-control-center PETAL webserver (to installl, configure, monitor, and manage the services) -> Harvest
-- [ ] Create a pyasic FastAPI bridge
+- [x] Create a pyasic FastAPI bridge
 - [ ] Implement a DATUM Gateway container -> docker-datum-gateway
 - [ ] Create a sensors FastAPI/Phoenix container
 - [ ] Implement a Prometheus/Grafana exporter
