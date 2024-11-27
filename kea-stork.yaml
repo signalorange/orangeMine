@@ -75,7 +75,7 @@ services:
       - "9090:9090"
       - "9093:9093"
     volumes:
-      - ./prometheus/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     restart: always
