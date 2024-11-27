@@ -61,6 +61,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Improve performance and security with an ipvlan/macvlan networking
 - [ ] Add network traffic monitoring and bandwidth management
 - [ ] Add a speedtest monitoring tool
+- [ ] Email report if external IP is different than WG_ENDPOINT
 
 ### Config/Housekeeping:
 

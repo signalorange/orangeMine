@@ -54,14 +54,15 @@ services:
       - DEBIAN_FRONTEND=noninteractive
     volumes:
       - ./stork/config/server.env:/etc/stork/server.env
-      - ./stork/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
-      - ./stork/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
-      - ./stork/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf
-      - ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
+      #- ./stork/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+      #- ./stork/config/supervisor/stork-server.conf:/etc/supervisor/conf.d/stork-server.conf
+      #- ./stork/config/supervisor/supervisor_monitor.conf:/etc/supervisor/conf.d/supervisor_monitor.conf
+      #- ./stork/tools/supervisor_monitor.py:/usr/lib/supervisor_monitor.py
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - db
+      - kea
   
   prometheus:
     restart: always
