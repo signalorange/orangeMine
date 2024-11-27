@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source .env
 # IP to test (Google DNS)
 TEST_IP="8.8.8.8"
 
