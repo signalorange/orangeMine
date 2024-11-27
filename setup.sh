@@ -1,4 +1,15 @@
 #!/bin/bash
+
+if [ $# -eq 0 ]; then
+    printf 'Have you updated the WG_ENDPOINT in .env (y/n)? '
+    read answer
+
+    if [ "$answer" != "${answer#[Yy]}" ] ;then 
+        echo Yes
+    else
+        echo No
+    fi
+fi
 source .env
 
 # Enable routing on host

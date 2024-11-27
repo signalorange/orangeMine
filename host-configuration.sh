@@ -75,4 +75,4 @@ sudo systemctl stop apparmor
 sudo systemctl disable apparmor
 
 # Setup crontab to start setup.sh on boot
-(crontab -l 2>/dev/null || true; echo "@reboot cd $(pwd) && ./setup.sh") | crontab -
+(sudo crontab -l 2>/dev/null || true; echo "@reboot cd $(pwd) && ./setup.sh y") | sudo crontab -
