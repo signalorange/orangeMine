@@ -18,16 +18,12 @@ if [ $? -eq 0 ]; then
     echo "WG is up"
     echo "Traceroute:"
     traceroute google.com
-    echo "IP:"
-    curl ifconfig.me
-    echo "/n"
+    echo "IP: $(curl ifconfig.me)"
 else
     # VPN is down, remove WireGuard route and fall back to eth2
     # ip route del default dev $WG_INTERFACE table wg_route 2>/dev/null
     echo "WG is down"
     echo "Traceroute:"
     traceroute google.com
-    echo "IP:"
-    curl ifconfig.me
-    echo "/n"
+    echo "IP: $(curl ifconfig.me)"
 fi
