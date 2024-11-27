@@ -28,9 +28,7 @@ services:
       - TZ=${TZ}
       - DEBIAN_FRONTEND=noninteractive
     volumes:
-      - type: bind
-        source: ./kea/config  # Configuration files for Kea
-        target: /etc/kea
+      - ./kea/config:/etc/kea
       - ./kea/var:/var/lib/kea  # Persistent data
     restart: always
 
