@@ -47,8 +47,8 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 
 ### Networking:
 
-- [ ] Setup Nat with dynamic docker interface
-- [ ] Save routes and iptables
+- [x] Setup Nat with dynamic docker interface
+- [x] Save routes and iptables
 - [x] Implement a working kea dhcp server
 - [x] Add a Stork webserver
 - [x] Implement a working dns-over-https/tls proxy

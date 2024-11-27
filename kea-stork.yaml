@@ -73,6 +73,7 @@ services:
       - DEBIAN_FRONTEND=noninteractive
     ports:
       - "9090:9090"
+      - "9093:9093"
     volumes:
       - ./prometheus/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
@@ -90,7 +91,7 @@ services:
       - ./grafana/config/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/config/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
       - ./grafana/config/grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
-      - ./grafana/kea-dhcp4.json:/var/lib/grafana/dashboards/kea-dhcp4.json
+      - ./kea/config/kea-dhcp4.json:/var/lib/grafana/dashboards/kea-dhcp4.json
       #- ./grafana/kea-dhcp6.json:/var/lib/grafana/dashboards/kea-dhcp6.json
       #- ./grafana/bind9-resolver.json:/var/lib/grafana/dashboards/bind9-resolver.json
     depends_on:

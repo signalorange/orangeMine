@@ -37,5 +37,6 @@ sudo ip route add default via ${NEXTHOP_IP} metric 200
 
 ## Set Up NAT
 sudo iptables -t nat -A POSTROUTING -o ${ETH2} -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -o $(ip -br addr | grep "172.20.0.1" | awk '{print $1}') -j MASQUERADE
 
 sudo sh -c '/sbin/iptables-save > /etc/iptables/rules.v4'
