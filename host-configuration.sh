@@ -22,6 +22,16 @@ sudo nano /etc/default/grub
 # GRUB_RECORDFAIL_TIMEOUT=5
 sudo update-grub
 
+## install orangeMine
+git clone https://github.com/signalorange/orangeMine
+cd orangeMine
+
+# configure orangeMine
+cp example.env .env
+cp wireguard/wg0.conf-example wireguard/wg0.conf
+cp kea/kea-dhcp.conf-example kea/kea-dhcp.conf
+source .env
+
 ## configure host interface LAN
 sudo ip addr add ${GATEWAY4}/24 dev ${ETH1}
 sudo ip link set dev ${ETH1} up
@@ -31,15 +41,6 @@ echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -w net.ipv4.ip_forward=1
 sudo sysctl -p /etc/sysctl.conf
 sudo sysctl -w net.ipv4.conf.all.src_valid_mark=1 #for wireguard
-
-## install orangeMine
-git clone https://github.com/signalorange/orangeMine
-cd orangeMine
-
-# configure orangeMine
-cp example.env .env
-cp wireguard/wg0.conf-example wireguard/wg0.conf
-cp kea/kea-dhcp.conf-example kea/kea-dhcp.conf
 
 ## configure tailscale
 sudo tailscale up --advertise-routes=${SUBNET4} --accept-routes
@@ -62,18 +63,16 @@ sudo systemctl start systemd-resolved
 sudo systemctl enable systemd-resolved
 
 # start services
-docker compose up -d
+#docker compose up -d
+./setup.sh
 
 # test services
 ./tests/dns.sh
 ./tests/wg.sh
 
-## Setup default and secondary routes
-sudo ip route del default
-sudo ip route add 79.135.104.88 via ${NEXTHOP_IP}
-sudo ip route add default via 172.20.0.10
-sudo ip route add default via ${NEXTHOP_IP} metric 200
-
-# Disable apparmor
+# Disable apparmor ?
 sudo systemctl stop apparmor
 sudo systemctl disable apparmor
+
+# Setup crontab to start setup.sh on boot
+(crontab -l 2>/dev/null || true; echo "@reboot cd ${pwd} && ./setup.sh") | crontab -

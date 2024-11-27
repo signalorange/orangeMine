@@ -32,9 +32,10 @@ docker compose restart kea
 ## Set Wireguard as priority
 sudo ip route del default
 sudo ip route add ${WG_ENDPOINT} via ${NEXTHOP_IP}
-sudo ip route add default via 172.20.0.10
+sudo ip route add default via ${WG_BRIDGE_IP}
 sudo ip route add default via ${NEXTHOP_IP} metric 200
 
 ## Set Up NAT
-sudo iptables -t nat -A POSTROUTING -o br-4dfbc301d7e9 -j MASQUERADE
 sudo iptables -t nat -A POSTROUTING -o ${ETH2} -j MASQUERADE
+
+sudo sh -c '/sbin/iptables-save > /etc/iptables/rules.v4'
