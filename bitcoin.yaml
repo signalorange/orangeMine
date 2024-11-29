@@ -58,7 +58,7 @@ services:
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 1m
-    command: "./wait-for db:3306 --timeout=720 -- nginx -g 'daemon off;'"
+    command: "./wait-for mempool_db:3306 --timeout=720 -- nginx -g 'daemon off;'"
     ports:
       - 8280:8080
   api:
@@ -69,7 +69,7 @@ services:
       CORE_RPC_USERNAME: "bitcoin"
       CORE_RPC_PASSWORD: "bitcoin"
       DATABASE_ENABLED: "true"
-      DATABASE_HOST: "db"
+      DATABASE_HOST: "mempool_db"
       DATABASE_DATABASE: "mempool"
       DATABASE_USERNAME: "mempool"
       DATABASE_PASSWORD: "mempool"
@@ -84,10 +84,10 @@ services:
     #extra_hosts:
     #  - "host.docker.internal:host-gateway"
     stop_grace_period: 1m
-    command: "./wait-for-it.sh db:3306 --timeout=720 --strict -- ./start.sh"
+    command: "./wait-for-it.sh mempool_db:3306 --timeout=720 --strict -- ./start.sh"
     volumes:
       - ./mempool_data:/backend/cache
-  db:
+  mempool_db:
     environment:
       MYSQL_DATABASE: "mempool"
       MYSQL_USER: "mempool"
