@@ -62,6 +62,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Add network traffic monitoring and bandwidth management
 - [ ] Add a speedtest monitoring tool
 - [ ] Email report if external IP is different than WG_ENDPOINT
+- [ ] UptimeKuma for monitoring services
 
 ### Config/Housekeeping:
 
@@ -73,6 +74,7 @@ In the future, orangeMine will integrate seamlessly into orangeOS, a bitcoin-foc
 - [ ] Add automated database backups for Kea DHCP
 - [ ] Add automated health checks for all services
 - [x] build docker images for kea & stork
+- [ ] List working features and future ones in the READNME.md
 
 ### Services and Features:
 
