@@ -1,6 +1,7 @@
 include:
   - kea-stork.yaml
   - networking.yaml
+  - bitcoin.yaml
 services:
   pyasic-api:
     image: signalorange/pyasic-api:latest

@@ -1,0 +1,102 @@
+services:
+  bitcoind:
+    image: kylemanna/bitcoind:latest
+    container_name: bitcoind
+    environment:
+      - UID=1000
+      - GUID=1000
+      - DISABLEWALLET=1
+      - PRINTTOCONSOLE=1
+      - TXINDEX=1
+      - SERVER=1
+      - RPCUSER=bitcoin
+      - RPCPASSWORD=bitcoin
+      - RPCALLOWIP=0.0.0.0/0
+      - RPCBIND=0.0.0.0
+      - REST=1
+    volumes:
+      - /bitcoin:/home/bitcoin/.bitcoin
+    ports:
+      - "8332:8332"  # RPC
+      - "8333:8333"  # P2P
+    restart: unless-stopped
+
+  electrs:
+    image: mempool/electrs:latest
+    container_name: electrs
+    depends_on:
+      - bitcoind
+    entrypoint:
+      /bin/electrs
+    command: |
+      --address-search
+      --db-dir /home/electrs/db
+      --cors '*'
+      --electrum-rpc-addr '0.0.0.0:50001'
+      --http-addr '0.0.0.0:3002'
+      --cookie bitcoin:bitcoin
+      --daemon-rpc-addr 'bitcoind:8332'
+      --daemon-dir=/bitcoin
+      --lightmode
+      --timestamp
+      -vvv
+    environment:
+      - UID=1000
+      - GUID=1000
+    volumes:
+      - /bitcoin/electrs:/home/electrs/db
+      - /bitcoin:/bitcoin
+    ports:
+      - '3002:3002'
+      - '50001:50001'
+    restart: unless-stopped
+  web:
+    environment:
+      FRONTEND_HTTP_PORT: "8080"
+      BACKEND_MAINNET_HTTP_HOST: "api"
+    image: mempool/frontend:latest
+    user: "1000:1000"
+    restart: on-failure
+    stop_grace_period: 1m
+    command: "./wait-for db:3306 --timeout=720 -- nginx -g 'daemon off;'"
+    ports:
+      - 8280:8080
+  api:
+    environment:
+#      MEMPOOL_BACKEND: "none"
+      CORE_RPC_HOST: "bitcoind"
+      CORE_RPC_PORT: "8332"
+      CORE_RPC_USERNAME: "bitcoin"
+      CORE_RPC_PASSWORD: "bitcoin"
+      DATABASE_ENABLED: "true"
+      DATABASE_HOST: "db"
+      DATABASE_DATABASE: "mempool"
+      DATABASE_USERNAME: "mempool"
+      DATABASE_PASSWORD: "mempool"
+      STATISTICS_ENABLED: "true"
+      MEMPOOL_BACKEND: "none"
+      ELECTRUM_HOST: "192.168.144.2"
+      ELECTRUM_PORT: "50001"
+      ELECTRUM_TLS_ENABLED: "true"
+    image: mempool/backend:latest
+    user: "1000:1000"
+    restart: on-failure
+    #extra_hosts:
+    #  - "host.docker.internal:host-gateway"
+    stop_grace_period: 1m
+    command: "./wait-for-it.sh db:3306 --timeout=720 --strict -- ./start.sh"
+    volumes:
+      - ./mempool_data:/backend/cache
+  db:
+    environment:
+      MYSQL_DATABASE: "mempool"
+      MYSQL_USER: "mempool"
+      MYSQL_PASSWORD: "mempool"
+      MYSQL_ROOT_PASSWORD: "admin"
+    image: mariadb:10.5.21
+    user: "1000:1000"
+    restart: on-failure
+    stop_grace_period: 1m
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+

@@ -76,3 +76,14 @@ sudo systemctl disable apparmor
 
 # Setup crontab to start setup.sh on boot
 (sudo crontab -l 2>/dev/null || true; echo "@reboot cd $(pwd) && ./setup.sh y") | sudo crontab -
+
+# format the nvme disk
+# list disks
+sudo fdisk -l
+sudo mkfs.ext4 /dev/nvme0n1
+# mount the disk
+sudo mkdir /bitcoin
+sudo mount /dev/nvme0n1 /bitcoin
+# add to fstab
+sudo nano /etc/fstab
+# /dev/nvme0n1 /bitcoin ext4 defaults 0 0
